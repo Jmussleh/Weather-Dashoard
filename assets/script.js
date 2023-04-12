@@ -1,7 +1,4 @@
-var Search = $('#search');
-var City = $('#citySearch');
-
-function getWeatherData(location) {
+/*function getWeatherData(location) {
     const apiKey = "2fa299772ce8810c137aa45c20f5b624";
     const api = `https://api.openweathermap.org/data/2.5/weather?q=${location}&units=metric&appid=${apiKey}`;
     return fetch(api)
@@ -14,25 +11,16 @@ function getWeatherData(location) {
         };
         return weatherData;
       });
-  }
-
-  function updateUI(weatherData) {
-    var weatherCard = $("#citycontainer");
-    var temperature = $("<p>");
-    temperature.textContent = `${weatherData.temperature}°C`;
-    var condition = $("<p>");
-    condition.textContent = weatherData.condition;
-    var location = $("#<p>");
-    location.textContent = weatherData.location;
-  }
-
-Search.addEventListener("click", () => {
-  const location = City.value;
-  getWeatherData(location)
-    .then(weatherData => {
-      updateUI(weatherData);
+  }*/
+  var city = document.getElementById('#citySearch');
+  var submit = document.getElementById('#search');
+  var api_key = "2fa299772ce8810c137aa45c20f5b624";
+  var baseURL = `https://api.openweathermap.org/geo/1.0/direct?q=${city}&appid=${api_key}`;
+  fetch(baseURL, {cache: 'reload'})
+    .then(function (response) {
+      return response.json();
     })
-    .catch(error => {
-      console.log(error);
+    .then(function (data) {
+      console.log(data);
     });
-});
+  
