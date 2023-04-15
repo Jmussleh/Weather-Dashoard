@@ -1,23 +1,10 @@
-/*function getWeatherData(location) {
-    const apiKey = "2fa299772ce8810c137aa45c20f5b624";
-    const api = `https://api.openweathermap.org/data/2.5/weather?q=${location}&units=metric&appid=${apiKey}`;
-    return fetch(api)
-      .then(response => response.json())
-      .then(data => {
-        const weatherData = {
-          temperature: data.main.temp,
-          condition: data.weather[0].main,
-          location: data.name,
-        };
-        return weatherData;
-      });
-  }*/
   var searchH = [];
-  var city = document.getElementById('#citySearch');
-  var submit = document.getElementById('#search');
+  var city = document.getElementById('#search-input');
+  var searchForm = document.getElementById('#search-form');
+  var Submit = document.getElementById('#submit');
   var CurrentWeatherCon = document.getElementById('#CurrentWeather');
   var forecastCon = document.getElementById('#5day');
-  var searchHistoryCon = document.getElementById('#city-container');
+  var searchHistoryCon = document.getElementById('#city-history');
   var api_key = "2fa299772ce8810c137aa45c20f5b624";
   var baseURL = 'https://api.openweathermap.org';
   
@@ -25,7 +12,7 @@
   dayjs.extend(window.dayjs_plugin_timezone);
 
   function SearchHistory() {
-    searchHistoryCon.innerHTML = '';
+    //searchHistoryCon.innerHTML ='';
     for (var i = searchH.length - 1; i >= 0; i--) {
       var btn = document.createElement('button');
       btn.setAttribute('type', 'button');
@@ -123,6 +110,34 @@
     forecastCon.append(col);
   }
 
+  function Forecast(dailyWeather) {
+   
+    var startDt = dayjs().add(1, 'day').startOf('day').unix();
+    var endDt = dayjs().add(6, 'day').startOf('day').unix();
+  
+    var headingCol = document.createElement('div');
+    var heading = document.createElement('h4');
+  
+    headingCol.setAttribute('class', 'col-12');
+    heading.textContent = '5-Day Forecast:';
+    headingCol.append(heading);
+  
+    forecastContainer.innerHTML = '';
+    forecastContainer.append(headingCol);
+  
+    for (var i = 0; i < dailyWeather.length; i++) {
+  
+      
+      if (dailyWeather[i].dt >= startDt && dailyWeather[i].dt < endDt) {
+  
+        
+        if (dailyWeather[i].dt_txt.slice(11, 13) == "12") {
+          ForecastCard(dailyWeather[i]);
+        }
+      }
+    }
+  }
+
   function renderData(city, data) {
     CurrentWeather(city, data.list[0], data.city.timezone);
     Forecast(data.list);
@@ -145,7 +160,53 @@
     });
 }
 
+function Coordinates(search) {
+  var apiUrl = `${baseURL}/geo/1.0/direct?q=${search}&limit=5&appid=${api_key}`;
 
-  //Make whatever data runs through above function run through again with the lat/lon to get weather data.
+  fetch(apiUrl)
+    .then(function (res) {
+      return res.json();
+    })
+    .then(function (data) {
+      if (!data[0]) {
+        alert('Location not found');
+      } else {
+        appendToHistory(search);
+        fetchWeather(data[0]);
+      }
+    })
+    .catch(function (err) {
+      console.error(err);
+    });
+}
+
+function handleSearchFormSubmit(e) {
+  
+  if (!searchInput.value) {
+    return;
+  }
+
+  e.preventDefault();
+  var search = searchInput.value.trim();
+  Coordinates(search);
+  searchInput.value = '';
+}
+
+function handleSearchHistory(e) {
+
+  if (!e.target.matches('.btn-history')) {
+    return;
+  }
+
+  var btn = e.target;
+  var search = btn.getAttribute('data-search');
+  Coordinates(search);
+}
+
+GetSearchHistory();
+searchForm.addEventListener('Submit', handleSearchFormSubmit);
+searchHistoryCon.addEventListener('click', handleSearchHistory);
+
+ 
 
   
