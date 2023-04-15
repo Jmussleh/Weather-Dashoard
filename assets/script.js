@@ -12,7 +12,7 @@
         return weatherData;
       });
   }*/
-  var SearchH = [];
+  var searchH = [];
   var city = document.getElementById('#citySearch');
   var submit = document.getElementById('#search');
   var CurrentWeatherCon = document.getElementById('#CurrentWeather');
@@ -24,6 +24,37 @@
   dayjs.extend(window.dayjs_plugin_utc);
   dayjs.extend(window.dayjs_plugin_timezone);
 
+  function SearchHistory() {
+    SearchHistoryCon.innerHTML = '';
+    for (var i = searchH.length - 1; i >= 0; i--) {
+      var btn = document.createElement('button');
+      btn.setAttribute('type', 'button');
+      btn.setAttribute('aria-controls', 'today forecast');
+      btn.classList.add('history-btn', 'btn-history');
+      btn.setAttribute('data-search', searchHistory[i]);
+      btn.textContent = searchH[i];
+      SearchHistoryCon.append(btn);
+    }
+  }
+  
+  function Historyadd(search) {
+    if (searchH.indexOf(search) !== -1) {
+      return;
+    }
+    searchH.push(search);
+  
+    localStorage.setItem('searchhistory', JSON.stringify(searchH));
+    SearchHistory();
+  }
+  
+  function GetSearchHistory() {
+    var storedHistory = localStorage.getItem('searchhistory');
+    if (storedHistory) {
+      searchHistory = JSON.parse(storedHistory);
+    }
+    SearchHistory();
+  }
+  
 
   function renderData(city, data) {
     CurrentWeather(city, data.list[0], data.city.timezone);
