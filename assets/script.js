@@ -1,10 +1,10 @@
   var searchH = [];
-  var city = document.getElementById('#search-input');
-  var searchForm = document.getElementById('#search-form');
-  var Submit = document.getElementById('#submit');
-  var CurrentWeatherCon = document.getElementById('#CurrentWeather');
-  var forecastCon = document.getElementById('#5day');
-  var searchHistoryCon = document.getElementById('#city-history');
+  var city = document.getElementById('search-input');
+  var searchForm = document.getElementById('search-form');
+  var Submit = document.getElementById('submit');
+  var CurrentWeatherCon = document.getElementById('CurrentWeather');
+  var forecastCon = document.getElementById('5day');
+  var searchHistoryCon = document.getElementById('city-history');
   var api_key = "2fa299772ce8810c137aa45c20f5b624";
   var baseURL = 'https://api.openweathermap.org';
   
@@ -122,8 +122,8 @@
     heading.textContent = '5-Day Forecast:';
     headingCol.append(heading);
   
-    forecastContainer.innerHTML = '';
-    forecastContainer.append(headingCol);
+    forecastCon.innerHTML = '';
+    forecastCon.append(headingCol);
   
     for (var i = 0; i < dailyWeather.length; i++) {
   
@@ -138,7 +138,7 @@
     }
   }
 
-  function renderData(city, data) {
+  function Data(city, data) {
     CurrentWeather(city, data.list[0], data.city.timezone);
     Forecast(data.list);
   }
@@ -153,7 +153,7 @@
       return res.json();
     })
     .then(function (data) {
-      renderData(city, data);
+      Data(city, data);
     })
     .catch(function (err) {
       console.error(err);
@@ -171,7 +171,7 @@ function Coordinates(search) {
       if (!data[0]) {
         alert('Location not found');
       } else {
-        appendToHistory(search);
+        Historyadd(search);
         fetchWeather(data[0]);
       }
     })
@@ -181,17 +181,13 @@ function Coordinates(search) {
 }
 
 function handleSearchFormSubmit(e) {
-  
-  if (!searchInput.value) {
-    return;
+    if (!city.value) {
+      return;
+    }
+    e.preventDefault();
+    var search = city.value;
+    Coordinates(search);
   }
-
-  e.preventDefault();
-  var search = searchInput.value.trim();
-  Coordinates(search);
-  searchInput.value = '';
-}
-
 function handleSearchHistory(e) {
 
   if (!e.target.matches('.btn-history')) {
@@ -204,7 +200,7 @@ function handleSearchHistory(e) {
 }
 
 GetSearchHistory();
-searchForm.addEventListener('Submit', handleSearchFormSubmit);
+Submit.addEventListener("click", handleSearchFormSubmit);
 searchHistoryCon.addEventListener('click', handleSearchHistory);
 
  
