@@ -16,8 +16,8 @@
   var city = document.getElementById('#citySearch');
   var submit = document.getElementById('#search');
   var CurrentWeatherCon = document.getElementById('#CurrentWeather');
-  var ForecastCon = document.getElementById('#5day');
-  var SearchHistoryCon = document.getElementById('#city-container');
+  var forecastCon = document.getElementById('#5day');
+  var searchHistoryCon = document.getElementById('#city-container');
   var api_key = "2fa299772ce8810c137aa45c20f5b624";
   var baseURL = 'https://api.openweathermap.org';
   
@@ -25,7 +25,7 @@
   dayjs.extend(window.dayjs_plugin_timezone);
 
   function SearchHistory() {
-    SearchHistoryCon.innerHTML = '';
+    searchHistoryCon.innerHTML = '';
     for (var i = searchH.length - 1; i >= 0; i--) {
       var btn = document.createElement('button');
       btn.setAttribute('type', 'button');
@@ -33,7 +33,7 @@
       btn.classList.add('history-btn', 'btn-history');
       btn.setAttribute('data-search', searchHistory[i]);
       btn.textContent = searchH[i];
-      SearchHistoryCon.append(btn);
+      searchHistoryCon.append(btn);
     }
   }
   
@@ -55,6 +55,73 @@
     SearchHistory();
   }
   
+  function CurrentWeather(city, weather) {
+    var date = dayjs().format('M/D/YYYY');
+
+    var tempF = weather.main.temp;
+    var windMph = weather.wind.speed;
+    var humidity = weather.main.humidity;
+  
+    var card = document.createElement('div');
+    var cardBody = document.createElement('div');
+    var heading = document.createElement('h2');
+    var tempEl = document.createElement('p');
+    var windEl = document.createElement('p');
+    var humidityEl = document.createElement('p');
+  
+    card.setAttribute('class', 'card');
+    cardBody.setAttribute('class', 'card-body');
+    card.append(cardBody);
+  
+    heading.setAttribute('class', 'h3 card-title');
+    tempEl.setAttribute('class', 'card-text');
+    windEl.setAttribute('class', 'card-text');
+    humidityEl.setAttribute('class', 'card-text');
+  
+    heading.textContent = `${city} (${date})`;
+    tempEl.textContent = `Temp: ${tempF}°F`;
+    windEl.textContent = `Wind: ${windMph} MPH`;
+    humidityEl.textContent = `Humidity: ${humidity} %`;
+    cardBody.append(heading, tempEl, windEl, humidityEl);
+  
+    CurrentWeatherCon.innerHTML = '';
+    CurrentWeatherCon.append(card);
+  }
+  
+  function ForecastCard(forecast) {
+  
+    var tempF = forecast.main.temp;
+    var humidity = forecast.main.humidity;
+    var windMph = forecast.wind.speed;
+  
+    var col = document.createElement('div');
+    var card = document.createElement('div');
+    var cardBody = document.createElement('div');
+    var cardTitle = document.createElement('h5');
+    var tempEl = document.createElement('p');
+    var windEl = document.createElement('p');
+    var humidityEl = document.createElement('p');
+  
+    col.append(card);
+    card.append(cardBody);
+    cardBody.append(cardTitle, tempEl, windEl, humidityEl);
+  
+    col.setAttribute('class', 'col-md');
+    col.classList.add('five-day-card');
+    card.setAttribute('class', 'card bg-primary h-100 text-white');
+    cardBody.setAttribute('class', 'card-body p-2');
+    cardTitle.setAttribute('class', 'card-title');
+    tempEl.setAttribute('class', 'card-text');
+    windEl.setAttribute('class', 'card-text');
+    humidityEl.setAttribute('class', 'card-text');
+  
+    cardTitle.textContent = dayjs(forecast.dt_txt).format('M/D/YYYY');
+    tempEl.textContent = `Temp: ${tempF} °F`;
+    windEl.textContent = `Wind: ${windMph} MPH`;
+    humidityEl.textContent = `Humidity: ${humidity} %`;
+  
+    forecastCon.append(col);
+  }
 
   function renderData(city, data) {
     CurrentWeather(city, data.list[0], data.city.timezone);
