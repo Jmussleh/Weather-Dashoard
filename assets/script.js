@@ -3,7 +3,7 @@
   var searchForm = document.getElementById('search-form');
   var Submit = document.getElementById('submit');
   var CurrentWeatherCon = document.getElementById('CurrentWeather');
-  var forecastCon = document.getElementById('5day');
+  var forecastCon = document.getElementById('5Day');
   var searchHistoryCon = document.getElementById('city-history');
   var api_key = "2fa299772ce8810c137aa45c20f5b624";
   var baseURL = 'https://api.openweathermap.org';
@@ -12,13 +12,13 @@
   dayjs.extend(window.dayjs_plugin_timezone);
 
   function SearchHistory() {
-    //searchHistoryCon.innerHTML ='';
+    searchHistoryCon.innerHTML ='';
     for (var i = searchH.length - 1; i >= 0; i--) {
       var btn = document.createElement('button');
       btn.setAttribute('type', 'button');
-      btn.setAttribute('aria-controls', 'today forecast');
-      btn.classList.add('history-btn', 'btn-history');
-      btn.setAttribute('data-search', searchHistory[i]);
+      //btn.setAttribute('aria-controls', 'today forecast');
+      btn.classList.add('history-btn', 'btn-history', 'btn-primary');
+      btn.setAttribute('data-search', searchH[i]);
       btn.textContent = searchH[i];
       searchHistoryCon.append(btn);
     }
@@ -37,7 +37,7 @@
   function GetSearchHistory() {
     var storedHistory = localStorage.getItem('searchhistory');
     if (storedHistory) {
-      searchHistory = JSON.parse(storedHistory);
+      searchH = JSON.parse(storedHistory);
     }
     SearchHistory();
   }
@@ -52,24 +52,24 @@
     var card = document.createElement('div');
     var cardBody = document.createElement('div');
     var heading = document.createElement('h2');
-    var tempEl = document.createElement('p');
-    var windEl = document.createElement('p');
-    var humidityEl = document.createElement('p');
+    var temp = document.createElement('p');
+    var wind = document.createElement('p');
+    var humidity1 = document.createElement('p');
   
     card.setAttribute('class', 'card');
     cardBody.setAttribute('class', 'card-body');
     card.append(cardBody);
   
     heading.setAttribute('class', 'h3 card-title');
-    tempEl.setAttribute('class', 'card-text');
-    windEl.setAttribute('class', 'card-text');
-    humidityEl.setAttribute('class', 'card-text');
+    temp.setAttribute('class', 'card-text');
+    wind.setAttribute('class', 'card-text');
+    humidity1.setAttribute('class', 'card-text');
   
     heading.textContent = `${city} (${date})`;
-    tempEl.textContent = `Temp: ${tempF}°F`;
-    windEl.textContent = `Wind: ${windMph} MPH`;
-    humidityEl.textContent = `Humidity: ${humidity} %`;
-    cardBody.append(heading, tempEl, windEl, humidityEl);
+    temp.textContent = `Temp: ${tempF}°F`;
+    wind.textContent = `Wind: ${windMph} MPH`;
+    humidity1.textContent = `Humidity: ${humidity} %`;
+    cardBody.append(heading, temp, wind, humidity1);
   
     CurrentWeatherCon.innerHTML = '';
     CurrentWeatherCon.append(card);
@@ -85,27 +85,27 @@
     var card = document.createElement('div');
     var cardBody = document.createElement('div');
     var cardTitle = document.createElement('h5');
-    var tempEl = document.createElement('p');
-    var windEl = document.createElement('p');
-    var humidityEl = document.createElement('p');
+    var temp = document.createElement('p');
+    var wind = document.createElement('p');
+    var humidityl = document.createElement('p');
   
     col.append(card);
     card.append(cardBody);
-    cardBody.append(cardTitle, tempEl, windEl, humidityEl);
+    cardBody.append(cardTitle, temp, wind, humidityl);
   
     col.setAttribute('class', 'col-md');
     col.classList.add('five-day-card');
     card.setAttribute('class', 'card bg-primary h-100 text-white');
     cardBody.setAttribute('class', 'card-body p-2');
     cardTitle.setAttribute('class', 'card-title');
-    tempEl.setAttribute('class', 'card-text');
-    windEl.setAttribute('class', 'card-text');
-    humidityEl.setAttribute('class', 'card-text');
+    temp.setAttribute('class', 'card-text');
+    wind.setAttribute('class', 'card-text');
+    humidityl.setAttribute('class', 'card-text');
   
     cardTitle.textContent = dayjs(forecast.dt_txt).format('M/D/YYYY');
-    tempEl.textContent = `Temp: ${tempF} °F`;
-    windEl.textContent = `Wind: ${windMph} MPH`;
-    humidityEl.textContent = `Humidity: ${humidity} %`;
+    temp.textContent = `Temp: ${tempF} °F`;
+    wind.textContent = `Wind: ${windMph} MPH`;
+    humidityl.textContent = `Humidity: ${humidity} %`;
   
     forecastCon.append(col);
   }
@@ -126,11 +126,9 @@
     forecastCon.append(headingCol);
   
     for (var i = 0; i < dailyWeather.length; i++) {
-  
       
       if (dailyWeather[i].dt >= startDt && dailyWeather[i].dt < endDt) {
   
-        
         if (dailyWeather[i].dt_txt.slice(11, 13) == "12") {
           ForecastCard(dailyWeather[i]);
         }
@@ -189,11 +187,9 @@ function handleSearchFormSubmit(e) {
     Coordinates(search);
   }
 function handleSearchHistory(e) {
-
   if (!e.target.matches('.btn-history')) {
     return;
   }
-
   var btn = e.target;
   var search = btn.getAttribute('data-search');
   Coordinates(search);
