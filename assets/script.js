@@ -16,7 +16,6 @@
     for (var i = searchH.length - 1; i >= 0; i--) {
       var btn = document.createElement('button');
       btn.setAttribute('type', 'button');
-      //btn.setAttribute('aria-controls', 'today forecast');
       btn.classList.add('history-btn', 'btn-history', 'btn-primary');
       btn.setAttribute('data-search', searchH[i]);
       btn.textContent = searchH[i];
@@ -50,17 +49,16 @@
     var humidity = weather.main.humidity;
   
     var card = document.createElement('div');
-    var cardBody = document.createElement('div');
+    var cardB = document.createElement('div');
     var heading = document.createElement('h2');
     var temp = document.createElement('p');
     var wind = document.createElement('p');
     var humidity1 = document.createElement('p');
   
     card.setAttribute('class', 'card');
-    cardBody.setAttribute('class', 'card-body');
-    card.append(cardBody);
+    cardB.setAttribute('class', 'card-body');
+    card.append(cardB);
   
-    heading.setAttribute('class', 'h3 card-title');
     temp.setAttribute('class', 'card-text');
     wind.setAttribute('class', 'card-text');
     humidity1.setAttribute('class', 'card-text');
@@ -69,7 +67,7 @@
     temp.textContent = `Temp: ${tempF}°F`;
     wind.textContent = `Wind: ${windMph} MPH`;
     humidity1.textContent = `Humidity: ${humidity} %`;
-    cardBody.append(heading, temp, wind, humidity1);
+    cardB.append(heading, temp, wind, humidity1);
   
     CurrentWeatherCon.innerHTML = '';
     CurrentWeatherCon.append(card);
@@ -83,21 +81,19 @@
   
     var col = document.createElement('div');
     var card = document.createElement('div');
-    var cardBody = document.createElement('div');
+    var cardB = document.createElement('div');
     var cardTitle = document.createElement('h5');
     var temp = document.createElement('p');
     var wind = document.createElement('p');
     var humidityl = document.createElement('p');
   
     col.append(card);
-    card.append(cardBody);
-    cardBody.append(cardTitle, temp, wind, humidityl);
+    card.append(cardB);
+    cardB.append(cardTitle, temp, wind, humidityl);
   
     col.setAttribute('class', 'col-md');
-    col.classList.add('five-day-card');
-    card.setAttribute('class', 'card bg-primary h-100 text-white');
-    cardBody.setAttribute('class', 'card-body p-2');
-    cardTitle.setAttribute('class', 'card-title');
+    card.setAttribute('class','card bg-primary h-100 text-white');
+    cardB.setAttribute('class', 'card-body p-2');
     temp.setAttribute('class', 'card-text');
     wind.setAttribute('class', 'card-text');
     humidityl.setAttribute('class', 'card-text');
@@ -130,7 +126,7 @@
       if (dailyWeather[i].dt >= startDt && dailyWeather[i].dt < endDt) {
   
         if (dailyWeather[i].dt_txt.slice(11, 13) == "12") {
-          ForecastCard(dailyWeather[i]);
+         ForecastCard(dailyWeather[i]);
         }
       }
     }
